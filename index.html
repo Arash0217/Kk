@@ -96,15 +96,11 @@
             randomClick(); // شروع اتو کلیکر
         }
 
-        // رفتن به صفحه مشخص
-        if (window.location.href.includes('web.telegram.org')) {
-            if (window.location.href !== 'https://web.telegram.org/k/#@notpixel') {
-                window.location.href = 'https://web.telegram.org/k/#@notpixel'; // به صفحه مورد نظر برو
-            } else {
-                createButton(); // دکمه را ایجاد کن
-            }
+        // بررسی صفحه و هدایت به آن
+        if (window.location.href !== 'https://web.telegram.org/k/#@notpixel') {
+            window.location.href = 'https://web.telegram.org/k/#@notpixel'; // به صفحه مورد نظر برو
         } else {
-            window.location.href = 'https://web.telegram.org/k/#@notpixel'; // به تلگرام وب برو
+            createButton(); // دکمه را ایجاد کن
         }
     </script>
 </body>
