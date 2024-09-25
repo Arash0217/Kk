@@ -1,17 +1,91 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نصب ویولنت مانکی</title>
-</head>
-<body>
-    <h1>به صفحه نصب ویولنت مانکی خوش آمدید!</h1>
-    <p>لطفاً برای نصب، به لینک‌های زیر مراجعه کنید:</p>
-    <ul>
-        <li><a href="https://violentmonkey.github.io/get-it/" target="_blank">نصب ویولنت مانکی</a></li>
-        <li><a href="https://github.com/Arash0217/Heh/raw/main/not-autoclicker.user.js" target="_blank">دانلود اسکریپت</a></li>
-        <li><a href="https://web.telegram.org/" target="_blank">به تلگرام بروید</a></li>
-    </ul>
-</body>
-</html>
+// ==UserScript==
+// @name         کانال تلگرام: @AirdropBeFarsi
+// @namespace    Coodlar Scripts
+// @match        *://*notpx.app/*
+// @version      1.7
+// @grant        none
+// @icon         https://notpx.app/favicon.ico
+// ==/UserScript==
+
+function waitForElement(selector, callback) {
+  const element = document.querySelector(selector);
+  if (element) {
+    callback(element);
+  } else {
+    setTimeout(() => waitForElement(selector, callback), 500);
+  }
+}
+
+function simulatePointerEvents(element, startX, startY, endX, endY) {
+  const events = [
+    new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
+    new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
+    new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
+    new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
+  ];
+
+  events.forEach(event => element.dispatchEvent(event));
+}
+
+function openPaintWindow() {
+  waitForElement('#canvasHolder', (canvas) => {
+    const centerX = Math.floor(canvas.width / 2);
+    const centerY = Math.floor(canvas.height / 2);
+    simulatePointerEvents(canvas, centerX, centerY, centerX, centerY);
+    console.log('سعی در باز کردن ناحیه نقاشی');
+  });
+}
+
+function randomClick() {
+  const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  if (paintButton) {
+    const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
+
+    if (buttonText === 'Paint') {
+      waitForElement('#canvasHolder', (canvas) => {
+        const x = Math.floor(Math.random() * canvas.width);
+        const y = Math.floor(Math.random() * canvas.height);
+        simulatePointerEvents(canvas, x, y, x, y);
+        simulatePointerEvents(paintButton, 0, 0, 0, 0);
+        setTimeout(randomClick, 1000);
+      });
+    } else {
+      setTimeout(randomClick, 1000);
+    }
+  } else {
+    openPaintWindow();
+    setTimeout(randomClick, 2000);
+  }
+}
+
+function createToggleButton() {
+  const button = document.createElement('button');
+  button.textContent = 'شروع/توقف';
+  button.style.position = 'fixed';
+  button.style.color = 'black';
+  button.style.top = '10px';
+  button.style.right = '10px';
+  button.style.zIndex = 1000;
+  button.style.backgroundColor = '#f0f0f0';
+  button.style.borderRadius = '5px';
+  
+  let running = false;
+  button.addEventListener('click', () => {
+    running = !running;
+    if (running) {
+      startScript();
+      button.textContent = 'توقف';
+    } else {
+      button.textContent = 'شروع';
+    }
+  });
+  
+  document.body.appendChild(button);
+}
+
+function startScript() {
+  openPaintWindow();
+  setTimeout(randomClick, 2000);
+}
+
+createToggleButton();
