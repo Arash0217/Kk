@@ -3,73 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اتو کلیکر تلگرام وب</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #startButton {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            padding: 10px 15px;
-            background-color: #0078D4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #startButton:hover {
-            background-color: #005A9E;
-        }
-    </style>
+    <title>نصب ویولنت مانکی</title>
 </head>
 <body>
-    <script>
-        let isActive = false;
-
-        function waitForElement(selector, callback) {
-            const element = document.querySelector(selector);
-            if (element) {
-                callback(element);
-            } else {
-                setTimeout(() => waitForElement(selector, callback), 500);
-            }
-        }
-
-        function createStartButton() {
-            const button = document.createElement('button');
-            button.id = 'startButton';
-            button.textContent = 'شروع اتو کلیکر';
-            document.body.appendChild(button);
-
-            button.addEventListener('click', function() {
-                isActive = !isActive;
-                this.textContent = isActive ? 'توقف اتو کلیکر' : 'شروع اتو کلیکر';
-                if (isActive) {
-                    startScript();
-                }
-            });
-        }
-
-        function startScript() {
-            console.log("اسکریپت فعال شد");
-            // افزودن توابع دیگر برای اتو کلیکر اینجا
-        }
-
-        // هدایت به آدرس مشخص‌شده
-        const targetUrl = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526';
-        if (window.location.href !== targetUrl) {
-            window.location.href = targetUrl; 
-        } else {
-            const checkInterval = setInterval(() => {
-                if (document.readyState === "complete") {
-                    clearInterval(checkInterval);
-                    createStartButton(); // دکمه را ایجاد کن
-                }
-            }, 1000);
-        }
-    </script>
+    <h1>به صفحه نصب ویولنت مانکی خوش آمدید!</h1>
+    <p>لطفاً برای نصب، به لینک‌های زیر مراجعه کنید:</p>
+    <ul>
+        <li><a href="https://violentmonkey.github.io/get-it/" target="_blank">نصب ویولنت مانکی</a></li>
+        <li><a href="https://github.com/Arash0217/Heh/raw/main/not-autoclicker.user.js" target="_blank">دانلود اسکریپت</a></li>
+        <li><a href="https://web.telegram.org/" target="_blank">به تلگرام بروید</a></li>
+    </ul>
 </body>
 </html>
