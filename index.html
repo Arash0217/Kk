@@ -3,74 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Clicker</title>
+    <title>اتو کلیکر تلگرام وب</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
         #startButton {
             position: fixed;
             top: 10px;
             right: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
+            z-index: 1000;
+            padding: 10px 15px;
+            background-color: #0078D4;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            z-index: 1000;
+        }
+        #startButton:hover {
+            background-color: #005A9E;
         }
     </style>
 </head>
 <body>
-    <h1>اسکریپت اتو کلیکر</h1>
-    <button id="startButton">شروع</button>
+    <button id="startButton">شروع اتو کلیکر</button>
 
     <script>
-        let clickCount = 0; // تعداد کلیک‌ها
-        const maxClicks = 10; // حداکثر تعداد کلیک‌ها
-        const clickDelay = 1000; // تاخیر بین کلیک‌ها (بر حسب میلی‌ثانیه)
+        let isActive = false;
 
-        function randomClick() {
-            if (clickCount >= maxClicks) {
-                console.log('تعداد کلیک‌ها به حداکثر رسید.');
-                return; // توقف کلیک‌ها
-            }
-
-            const targetElement = document.querySelector('button'); // انتخابگر برای دکمه هدف مینی اپ
-
-            if (targetElement) {
-                const rect = targetElement.getBoundingClientRect();
-                const x = rect.left + rect.width / 2; // وسط عنصر
-                const y = rect.top + rect.height / 2; // وسط عنصر
-
-                // شبیه‌سازی کلیک
-                simulatePointerEvents(targetElement, x, y, x, y);
-                clickCount++;
-                console.log(`کلیک ${clickCount} در عنصر هدف.`);
-
-                // تنظیم تاخیر بین کلیک‌ها
-                setTimeout(randomClick, clickDelay);
-            } else {
-                console.log('عنصر هدف پیدا نشد. سعی در پیدا کردن آن...');
-                setTimeout(randomClick, 2000); // تلاش مجدد بعد از 2 ثانیه
-            }
-        }
-
-        function simulatePointerEvents(element, startX, startY, endX, endY) {
-            const events = [
-                new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
-                new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
-            ];
-
-            events.forEach(event => element.dispatchEvent(event));
-        }
-
-        // باز کردن تلگرام وب
+        // رفتن به تلگرام وب
         window.open('https://web.telegram.org', '_blank');
 
-        document.getElementById('startButton').addEventListener('click', () => {
-            randomClick(); // شروع کلیک‌ها بلافاصله
+        document.getElementById('startButton').addEventListener('click', function() {
+            isActive = !isActive;
+            this.textContent = isActive ? 'توقف اتو کلیکر' : 'شروع اتو کلیکر';
+            if (isActive) {
+                startAutoClicker();
+            }
         });
+
+        function startAutoClicker() {
+            function randomClick() {
+                if (!isActive) return;
+
+                const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                if (paintButton) {
+                    const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
+
+                    if (buttonText === 'Paint') {
+                        const canvas = document.querySelector('#canvasHolder');
+                        if (canvas) {
+                            const centerX = canvas.width / 2;
+                            const centerY = canvas.height / 2;
+                            simulatePointerEvents(canvas, centerX, centerY, centerX, centerY);
+
+                            const moveX = Math.floor(Math.random() * 200) - 100;
+                            const moveY = Math.floor(Math.random() * 200) - 100;
+                            simulatePointerEvents(canvas, centerX, centerY, centerX + moveX, centerY + moveY);
+                        }
+                    }
+
+                    setTimeout(randomClick, 2000); // هر 2 ثانیه یک بار کلیک می‌کند
+                } else {
+                    setTimeout(randomClick, 2000); // اگر دکمه پیدا نشد، دوباره چک می‌کند
+                }
+            }
+
+            function simulatePointerEvents(element, startX, startY, endX, endY) {
+                const events = [
+                    new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
+                    new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
+                    new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
+                    new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
+                ];
+
+                events.forEach(event => element.dispatchEvent(event));
+            }
+
+            randomClick(); // شروع اتو کلیکر
+        }
     </script>
 </body>
 </html>
