@@ -16,23 +16,13 @@
             }
         }
 
-        function simulatePointerEvents(element, startX, startY, endX, endY) {
+        function simulatePointerEvents(element, x, y) {
             const events = [
-                new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
-                new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
+                new PointerEvent('pointerdown', { clientX: x, clientY: y, bubbles: true }),
+                new PointerEvent('pointermove', { clientX: x, clientY: y, bubbles: true }),
+                new PointerEvent('pointerup', { clientX: x, clientY: y, bubbles: true })
             ];
             events.forEach(event => element.dispatchEvent(event));
-        }
-
-        function openPaintWindow() {
-            waitForElement('#canvasHolder', (canvas) => {
-                const centerX = Math.floor(canvas.width / 2);
-                const centerY = Math.floor(canvas.height / 2);
-                simulatePointerEvents(canvas, centerX, centerY, centerX, centerY);
-                console.log('سعی در باز کردن ناحیه نقاشی');
-            });
         }
 
         function randomClick() {
@@ -43,26 +33,30 @@
 
             const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
             if (paintButton) {
-                const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
+                const buttonText = paintButton.textContent.trim();
 
                 if (buttonText === 'Paint') {
-                    waitForElement('#canvasHolder', (canvas) => {
-                        const moveX = Math.floor(Math.random() * 200) - 100; // از -100 تا 100
-                        const moveY = Math.floor(Math.random() * 200) - 100; // از -100 تا 100
-                        simulatePointerEvents(canvas, canvas.width / 2, canvas.height / 2, canvas.width / 2 + moveX, canvas.height / 2 + moveY);
+                    const canvas = document.querySelector('#canvasHolder');
+                    if (canvas) {
                         const x = Math.floor(Math.random() * canvas.width);
                         const y = Math.floor(Math.random() * canvas.height);
-                        simulatePointerEvents(canvas, x, y, x, y);
-                        simulatePointerEvents(paintButton, 0, 0, 0, 0);
+                        simulatePointerEvents(canvas, x, y);
+                        simulatePointerEvents(paintButton, 0, 0);
                         const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
                         setTimeout(randomClick, nextClickDelay);
-                    });
+                    }
                 }
             } else {
                 console.log('ناحیه نقاشی پیدا نشد. سعی در باز کردن آن.');
                 openPaintWindow();
                 setTimeout(randomClick, 2000);
             }
+        }
+
+        function openPaintWindow() {
+            waitForElement('#canvasHolder', (canvas) => {
+                console.log('ناحیه نقاشی باز شد.');
+            });
         }
 
         function startScript() {
@@ -77,34 +71,32 @@
             console.log(paused ? 'اسکریپت متوقف شد.' : 'اسکریپت ادامه پیدا کرد.');
         }
 
-        function startTimer() {
-            let timeLeft = 60; // زمان به ثانیه
-            const timerElement = document.getElementById('timer');
-
-            const timerInterval = setInterval(() => {
-                if (paused) return; // اگر متوقف است، تایمر را متوقف کن
-                timeLeft--;
-                timerElement.textContent = `زمان باقی‌مانده: ${timeLeft} ثانیه`;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    alert("زمان تمام شد!");
-                    togglePause(); // بعد از اتمام زمان، اسکریپت را متوقف کن
-                }
-            }, 1000);
-        }
-
         // زمان‌بندی برای هدایت و فعال‌سازی اسکریپت
         setTimeout(() => {
             startScript(); // شروع اسکریپت
             redirectToAirdrop(); // هدایت به لینک
-            startTimer(); // شروع تایمر
+            createPauseButton(); // ایجاد دکمه توقف
         }, 3000); // 3 ثانیه تا هدایت
+
+        function redirectToAirdrop() {
+            window.location.href = "https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526";
+        }
+
+        function createPauseButton() {
+            const button = document.createElement('button');
+            button.id = 'pauseButton';
+            button.textContent = 'توقف';
+            button.style.position = 'fixed';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            button.style.zIndex = 1000;
+            button.addEventListener('click', togglePause);
+            document.body.appendChild(button);
+        }
     </script>
 </head>
 <body>
     <h1>در حال هدایت به ایردراپ تلگرام...</h1>
     <p>لطفاً وارد حساب تلگرام خود شوید.</p>
-    <button id="pauseButton" onclick="togglePause()">توقف</button>
-    <p id="timer">زمان باقی‌مانده: 60 ثانیه</p>
 </body>
 </html>
