@@ -121,68 +121,6 @@
             return false;
         }
 
-        function createPauseButton() {
-            const button = document.createElement('button');
-            button.textContent = 'متوقف کردن';
-            button.style.position = 'fixed';
-            button.style.color = 'black';
-            button.style.top = '10px';
-            button.style.right = '10px';
-            button.style.zIndex = 1000;
-            button.style.backgroundColor = '#f0f0f0';
-            button.style.borderRadius = '5px';
-            button.addEventListener('click', () => {
-                const existingContainer = document.querySelector('.pause-container');
-                if (existingContainer) {
-                    document.body.removeChild(existingContainer);
-                } else {
-                    const pauseUntil = promptForDate();
-                    if (pauseUntil) {
-                        localStorage.setItem('pauseUntil', pauseUntil.toISOString());
-                    }
-                }
-            });
-            document.body.appendChild(button);
-        }
-
-        function promptForDate() {
-            const container = document.createElement('div');
-            container.className = 'pause-container';
-            container.style.position = 'fixed';
-            container.style.top = '50%';
-            container.style.left = '50%';
-            container.style.transform = 'translate(-50%, -50%)';
-            container.style.backgroundColor = 'white';
-            container.style.padding = '20px';
-            container.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-            container.style.zIndex = 1001;
-
-            const input = document.createElement('input');
-            input.type = 'datetime-local';
-            input.style.marginBottom = '10px';
-            container.appendChild(input);
-
-            const button = document.createElement('button');
-            button.textContent = 'تایید';
-            button.style.color = 'black';
-            button.addEventListener('click', () => {
-                const date = new Date(input.value);
-                if (!isNaN(date)) {
-                    localStorage.setItem('pauseUntil', date.toISOString());
-                    document.body.removeChild(container);
-                } else {
-                    alert('تاریخ نادرست است');
-                }
-            });
-            container.appendChild(button);
-
-            const info = document.createElement('p');
-            info.textContent = 'سازنده: @AirdropBeFarsi ایردراپ به فارسی';
-            container.appendChild(info);
-
-            document.body.appendChild(container);
-        }
-
         function createStartButton() {
             const button = document.createElement('button');
             button.id = 'startButton';
@@ -199,7 +137,6 @@
         }
 
         function startScript() {
-            createPauseButton();
             openPaintWindow();
             setTimeout(randomClick, 2000);
             checkGameCrash();
