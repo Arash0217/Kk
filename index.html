@@ -1,106 +1,49 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هدایت به ایردراپ</title>
-    <script>
-        let paused = false;
+let clickCount = 0; // تعداد کلیک‌ها
+const maxClicks = 10; // حداکثر تعداد کلیک‌ها
+const clickDelay = 1000; // تاخیر بین کلیک‌ها (بر حسب میلی‌ثانیه)
 
-        function startScript() {
-            console.log('اسکریپت شروع شد.');
-            // کد کلیکر شما
-            function waitForElement(selector, callback) {
-                const element = document.querySelector(selector);
-                if (element) {
-                    callback(element);
-                } else {
-                    setTimeout(() => waitForElement(selector, callback), 500);
-                }
-            }
+function navigateToTelegram() {
+    window.location.href = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526';
+}
 
-            function simulatePointerEvents(element, startX, startY, endX, endY) {
-                const events = [
-                    new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
-                    new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
-                    new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
-                    new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
-                ];
+function randomClick() {
+    if (clickCount >= maxClicks) {
+        console.log('تعداد کلیک‌ها به حداکثر رسید.');
+        return; // توقف کلیک‌ها
+    }
 
-                events.forEach(event => element.dispatchEvent(event));
-            }
+    const targetElement = document.querySelector('#target-element-selector'); // انتخاب عنصر هدف
+    if (targetElement) {
+        const rect = targetElement.getBoundingClientRect();
+        const x = rect.left + rect.width / 2; // وسط عنصر
+        const y = rect.top + rect.height / 2; // وسط عنصر
 
-            function randomClick() {
-                if (paused) {
-                    console.log('اسکریپت در حال توقف است.');
-                    setTimeout(randomClick, 1000);
-                    return;
-                }
+        // شبیه‌سازی کلیک
+        simulatePointerEvents(targetElement, x, y, x, y);
+        clickCount++;
+        console.log(`کلیک ${clickCount} در عنصر هدف.`);
 
-                const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-                if (paintButton) {
-                    const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
+        // تنظیم تاخیر بین کلیک‌ها
+        setTimeout(randomClick, clickDelay);
+    } else {
+        console.log('عنصر هدف پیدا نشد. سعی در پیدا کردن آن...');
+        setTimeout(randomClick, 2000); // تلاش مجدد بعد از 2 ثانیه
+    }
+}
 
-                    if (buttonText === 'Paint') {
-                        waitForElement('#canvasHolder', (canvas) => {
-                            const moveX = Math.floor(Math.random() * 200) - 100; // از -100 تا 100
-                            const moveY = Math.floor(Math.random() * 200) - 100; // از -100 تا 100
-                            simulatePointerEvents(canvas, canvas.width / 2, canvas.height / 2, canvas.width / 2 + moveX, canvas.height / 2 + moveY);
-                            simulatePointerEvents(paintButton, 0, 0, 0, 0);
-                            setTimeout(randomClick, Math.floor(Math.random() * 1000) + 1000);
-                        });
-                    } else if (buttonText === 'No energy') {
-                        setTimeout(randomClick, Math.floor(Math.random() * 120000) + 60000);
-                    } else {
-                        setTimeout(randomClick, Math.floor(Math.random() * 1000) + 1000);
-                    }
-                } else {
-                    setTimeout(randomClick, 2000);
-                }
-            }
+function simulatePointerEvents(element, startX, startY, endX, endY) {
+    const events = [
+        new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
+        new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
+        new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
+        new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
+    ];
 
-            setTimeout(randomClick, 2000);
-        }
+    events.forEach(event => element.dispatchEvent(event));
+}
 
-        function togglePause() {
-            paused = !paused;
-            const button = document.getElementById('pauseButton');
-            button.textContent = paused ? 'ادامه' : 'توقف';
-            console.log(paused ? 'اسکریپت متوقف شد.' : 'اسکریپت ادامه پیدا کرد.');
-        }
-
-        function createButtons() {
-            const startButton = document.createElement('button');
-            startButton.textContent = 'شروع اسکریپت';
-            startButton.style.position = 'fixed';
-            startButton.style.top = '10px';
-            startButton.style.right = '10px';
-            startButton.style.zIndex = 1000;
-            startButton.addEventListener('click', () => {
-                startScript();
-                startButton.style.display = 'none'; // پنهان کردن دکمه شروع
-            });
-            document.body.appendChild(startButton);
-
-            const pauseButton = document.createElement('button');
-            pauseButton.textContent = 'توقف';
-            pauseButton.style.position = 'fixed';
-            pauseButton.style.top = '50px';
-            pauseButton.style.right = '10px';
-            pauseButton.style.zIndex = 1000;
-            pauseButton.addEventListener('click', togglePause);
-            document.body.appendChild(pauseButton);
-        }
-
-        // ایجاد دکمه‌ها و شروع اسکریپت بعد از ۲۰ ثانیه
-        window.onload = function() {
-            setTimeout(() => {
-                createButtons(); // ایجاد دکمه‌ها پس از ۲۰ ثانیه
-                startScript(); // شروع اسکریپت به‌صورت خودکار
-            }, 20000);
-        };
-    </script>
-</head>
-<body>
-</body>
-</html>
+// شروع هدایت به تلگرام و کلیک‌ها
+setTimeout(() => {
+    navigateToTelegram(); // هدایت به تلگرام
+    setTimeout(randomClick, 2000); // شروع کلیک‌ها پس از 2 ثانیه در تلگرام
+}, 20000); // 20 ثانیه برای آماده‌سازی
