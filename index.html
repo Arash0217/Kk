@@ -1,49 +1,69 @@
-let clickCount = 0; // تعداد کلیک‌ها
-const maxClicks = 10; // حداکثر تعداد کلیک‌ها
-const clickDelay = 1000; // تاخیر بین کلیک‌ها (بر حسب میلی‌ثانیه)
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Clicker</title>
+</head>
+<body>
+    <h1>اسکریپت اتو کلیکر</h1>
+    <button id="startButton">شروع</button>
 
-function navigateToTelegram() {
-    window.location.href = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526';
-}
+    <script>
+        let clickCount = 0; // تعداد کلیک‌ها
+        const maxClicks = 10; // حداکثر تعداد کلیک‌ها
+        const clickDelay = 1000; // تاخیر بین کلیک‌ها (بر حسب میلی‌ثانیه)
 
-function randomClick() {
-    if (clickCount >= maxClicks) {
-        console.log('تعداد کلیک‌ها به حداکثر رسید.');
-        return; // توقف کلیک‌ها
-    }
+        function navigateToTelegram() {
+            window.location.href = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526';
+        }
 
-    const targetElement = document.querySelector('#target-element-selector'); // انتخاب عنصر هدف
-    if (targetElement) {
-        const rect = targetElement.getBoundingClientRect();
-        const x = rect.left + rect.width / 2; // وسط عنصر
-        const y = rect.top + rect.height / 2; // وسط عنصر
+        function randomClick() {
+            if (clickCount >= maxClicks) {
+                console.log('تعداد کلیک‌ها به حداکثر رسید.');
+                return; // توقف کلیک‌ها
+            }
 
-        // شبیه‌سازی کلیک
-        simulatePointerEvents(targetElement, x, y, x, y);
-        clickCount++;
-        console.log(`کلیک ${clickCount} در عنصر هدف.`);
+            const targetElement = document.querySelector('#target-element-selector'); // انتخاب عنصر هدف
+            if (targetElement) {
+                const rect = targetElement.getBoundingClientRect();
+                const x = rect.left + rect.width / 2; // وسط عنصر
+                const y = rect.top + rect.height / 2; // وسط عنصر
 
-        // تنظیم تاخیر بین کلیک‌ها
-        setTimeout(randomClick, clickDelay);
-    } else {
-        console.log('عنصر هدف پیدا نشد. سعی در پیدا کردن آن...');
-        setTimeout(randomClick, 2000); // تلاش مجدد بعد از 2 ثانیه
-    }
-}
+                // شبیه‌سازی کلیک
+                simulatePointerEvents(targetElement, x, y, x, y);
+                clickCount++;
+                console.log(`کلیک ${clickCount} در عنصر هدف.`);
 
-function simulatePointerEvents(element, startX, startY, endX, endY) {
-    const events = [
-        new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
-        new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
-        new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
-        new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
-    ];
+                // تنظیم تاخیر بین کلیک‌ها
+                setTimeout(randomClick, clickDelay);
+            } else {
+                console.log('عنصر هدف پیدا نشد. سعی در پیدا کردن آن...');
+                setTimeout(randomClick, 2000); // تلاش مجدد بعد از 2 ثانیه
+            }
+        }
 
-    events.forEach(event => element.dispatchEvent(event));
-}
+        function simulatePointerEvents(element, startX, startY, endX, endY) {
+            const events = [
+                new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
+                new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
+                new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
+                new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
+            ];
 
-// شروع هدایت به تلگرام و کلیک‌ها
-setTimeout(() => {
-    navigateToTelegram(); // هدایت به تلگرام
-    setTimeout(randomClick, 2000); // شروع کلیک‌ها پس از 2 ثانیه در تلگرام
-}, 20000); // 20 ثانیه برای آماده‌سازی
+            events.forEach(event => element.dispatchEvent(event));
+        }
+
+        document.getElementById('startButton').addEventListener('click', () => {
+            navigateToTelegram(); // هدایت به تلگرام
+            setTimeout(randomClick, 2000); // شروع کلیک‌ها پس از 2 ثانیه در تلگرام
+        });
+
+        // به‌محض بارگذاری صفحه، به تلگرام بروید
+        window.onload = function() {
+            navigateToTelegram();
+            setTimeout(randomClick, 2000); // شروع کلیک‌ها پس از 2 ثانیه در تلگرام
+        };
+    </script>
+</body>
+</html>
