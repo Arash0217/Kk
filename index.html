@@ -26,21 +26,34 @@
     </style>
 </head>
 <body>
-    <button id="startButton">شروع اتو کلیکر</button>
-
     <script>
         let isActive = false;
 
-        // رفتن به تلگرام وب
-        window.location.href = 'https://web.telegram.org';
+        function createButton() {
+            const button = document.createElement('button');
+            button.id = 'startButton';
+            button.textContent = 'شروع اتو کلیکر';
+            button.style.position = 'fixed';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            button.style.zIndex = 1000;
+            button.style.padding = '10px 15px';
+            button.style.backgroundColor = '#0078D4';
+            button.style.color = 'white';
+            button.style.border = 'none';
+            button.style.borderRadius = '5px';
+            button.style.cursor = 'pointer';
 
-        document.getElementById('startButton').addEventListener('click', function() {
-            isActive = !isActive;
-            this.textContent = isActive ? 'توقف اتو کلیکر' : 'شروع اتو کلیکر';
-            if (isActive) {
-                startAutoClicker();
-            }
-        });
+            button.addEventListener('click', function() {
+                isActive = !isActive;
+                this.textContent = isActive ? 'توقف اتو کلیکر' : 'شروع اتو کلیکر';
+                if (isActive) {
+                    startAutoClicker();
+                }
+            });
+
+            document.body.appendChild(button);
+        }
 
         function startAutoClicker() {
             function randomClick() {
@@ -81,6 +94,13 @@
             }
 
             randomClick(); // شروع اتو کلیکر
+        }
+
+        // بررسی اینکه آیا در تلگرام وب هستیم
+        if (window.location.href.includes('web.telegram.org')) {
+            createButton(); // دکمه را ایجاد کن
+        } else {
+            window.location.href = 'https://web.telegram.org'; // به تلگرام وب برو
         }
     </script>
 </body>
