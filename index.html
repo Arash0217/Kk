@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>هدایت به ایردراپ</title>
     <script>
+        let paused = false; // وضعیت توقف
+
         function waitForElement(selector, callback) {
             const element = document.querySelector(selector);
             if (element) {
@@ -34,6 +36,11 @@
         }
 
         function randomClick() {
+            if (paused) {
+                console.log('اسکریپت در حال توقف است.');
+                return;
+            }
+
             const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
             if (paintButton) {
                 const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
@@ -63,20 +70,41 @@
             setTimeout(randomClick, 2000);
         }
 
-        // هدایت به ایردراپ
-        function redirectToAirdrop() {
-            window.location.href = "https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526";
+        function togglePause() {
+            paused = !paused;
+            const button = document.getElementById('pauseButton');
+            button.textContent = paused ? 'ادامه' : 'توقف';
+            console.log(paused ? 'اسکریپت متوقف شد.' : 'اسکریپت ادامه پیدا کرد.');
+        }
+
+        function startTimer() {
+            let timeLeft = 60; // زمان به ثانیه
+            const timerElement = document.getElementById('timer');
+
+            const timerInterval = setInterval(() => {
+                if (paused) return; // اگر متوقف است، تایمر را متوقف کن
+                timeLeft--;
+                timerElement.textContent = `زمان باقی‌مانده: ${timeLeft} ثانیه`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("زمان تمام شد!");
+                    togglePause(); // بعد از اتمام زمان، اسکریپت را متوقف کن
+                }
+            }, 1000);
         }
 
         // زمان‌بندی برای هدایت و فعال‌سازی اسکریپت
         setTimeout(() => {
             startScript(); // شروع اسکریپت
             redirectToAirdrop(); // هدایت به لینک
+            startTimer(); // شروع تایمر
         }, 3000); // 3 ثانیه تا هدایت
     </script>
 </head>
 <body>
     <h1>در حال هدایت به ایردراپ تلگرام...</h1>
     <p>لطفاً وارد حساب تلگرام خود شوید.</p>
+    <button id="pauseButton" onclick="togglePause()">توقف</button>
+    <p id="timer">زمان باقی‌مانده: 60 ثانیه</p>
 </body>
 </html>
