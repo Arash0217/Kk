@@ -33,16 +33,7 @@
             const button = document.createElement('button');
             button.id = 'startButton';
             button.textContent = 'شروع اتو کلیکر';
-            button.style.position = 'fixed';
-            button.style.top = '10px';
-            button.style.right = '10px';
-            button.style.zIndex = 1000;
-            button.style.padding = '10px 15px';
-            button.style.backgroundColor = '#0078D4';
-            button.style.color = 'white';
-            button.style.border = 'none';
-            button.style.borderRadius = '5px';
-            button.style.cursor = 'pointer';
+            document.body.appendChild(button);
 
             button.addEventListener('click', function() {
                 isActive = !isActive;
@@ -51,8 +42,6 @@
                     startAutoClicker();
                 }
             });
-
-            document.body.appendChild(button);
         }
 
         function startAutoClicker() {
@@ -96,9 +85,9 @@
             randomClick(); // شروع اتو کلیکر
         }
 
-        // بررسی صفحه و هدایت به آن
-        if (window.location.href !== 'https://web.telegram.org/k/#@notpixel') {
-            window.location.href = 'https://web.telegram.org/k/#@notpixel'; // به صفحه مورد نظر برو
+        // هدایت به آدرس مشخص‌شده
+        if (window.location.href !== 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526') {
+            window.location.href = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526'; // به صفحه مورد نظر برو
         } else {
             createButton(); // دکمه را ایجاد کن
         }
