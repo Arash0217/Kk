@@ -24,7 +24,9 @@
                 return; // توقف کلیک‌ها
             }
 
-            const targetElement = document.querySelector('#target-element-selector'); // انتخاب عنصر هدف
+            // انتخاب عنصر هدف در تلگرام
+            const targetElement = document.querySelector('YOUR_TARGET_SELECTOR'); // تغییر دهید به انتخابگر مناسب
+
             if (targetElement) {
                 const rect = targetElement.getBoundingClientRect();
                 const x = rect.left + rect.width / 2; // وسط عنصر
