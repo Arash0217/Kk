@@ -28,17 +28,13 @@
         const maxClicks = 10; // حداکثر تعداد کلیک‌ها
         const clickDelay = 1000; // تاخیر بین کلیک‌ها (بر حسب میلی‌ثانیه)
 
-        function navigateToTelegram() {
-            window.location.href = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526';
-        }
-
         function randomClick() {
             if (clickCount >= maxClicks) {
                 console.log('تعداد کلیک‌ها به حداکثر رسید.');
                 return; // توقف کلیک‌ها
             }
 
-            const targetElement = document.querySelector('YOUR_TARGET_SELECTOR'); // تغییر دهید به انتخابگر مناسب
+            const targetElement = document.querySelector('button'); // انتخابگر برای دکمه هدف مینی اپ
 
             if (targetElement) {
                 const rect = targetElement.getBoundingClientRect();
@@ -69,9 +65,11 @@
             events.forEach(event => element.dispatchEvent(event));
         }
 
+        // باز کردن تلگرام وب
+        window.open('https://web.telegram.org', '_blank');
+
         document.getElementById('startButton').addEventListener('click', () => {
-            navigateToTelegram(); // هدایت به تلگرام
-            setTimeout(randomClick, 5000); // شروع کلیک‌ها بعد از ۵ ثانیه
+            randomClick(); // شروع کلیک‌ها بلافاصله
         });
     </script>
 </body>
