@@ -96,11 +96,15 @@
             randomClick(); // شروع اتو کلیکر
         }
 
-        // بررسی اینکه آیا در تلگرام وب هستیم
+        // رفتن به صفحه مشخص
         if (window.location.href.includes('web.telegram.org')) {
-            createButton(); // دکمه را ایجاد کن
+            if (window.location.href !== 'https://web.telegram.org/k/#@notpixel') {
+                window.location.href = 'https://web.telegram.org/k/#@notpixel'; // به صفحه مورد نظر برو
+            } else {
+                createButton(); // دکمه را ایجاد کن
+            }
         } else {
-            window.location.href = 'https://web.telegram.org'; // به تلگرام وب برو
+            window.location.href = 'https://web.telegram.org/k/#@notpixel'; // به تلگرام وب برو
         }
     </script>
 </body>
