@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نصب ویولنت مانکی</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <h1>به صفحه نصب ویولنت مانکی خوش آمدید!</h1>
@@ -13,5 +37,17 @@
         <li><a href="https://github.com/Arash0217/Heh/raw/main/not-autoclicker.user.js" target="_blank">دانلود اسکریپت</a></li>
         <li><a href="https://web.telegram.org/" target="_blank">به تلگرام بروید</a></li>
     </ul>
+    
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+        .then(() => {
+            console.log('Service Worker registered successfully.');
+        })
+        .catch(error => {
+            console.error('Service Worker registration failed:', error);
+        });
+    }
+    </script>
 </body>
 </html>
