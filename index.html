@@ -5,64 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>هدایت به ایردراپ</title>
     <script>
-        let paused = false; // وضعیت توقف
-
-        function waitForElement(selector, callback) {
-            const element = document.querySelector(selector);
-            if (element) {
-                callback(element);
-            } else {
-                setTimeout(() => waitForElement(selector, callback), 500);
-            }
-        }
-
-        function simulatePointerEvents(element, x, y) {
-            const events = [
-                new PointerEvent('pointerdown', { clientX: x, clientY: y, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: x, clientY: y, bubbles: true }),
-                new PointerEvent('pointerup', { clientX: x, clientY: y, bubbles: true })
-            ];
-            events.forEach(event => element.dispatchEvent(event));
-        }
-
-        function randomClick() {
-            if (paused) {
-                console.log('اسکریپت در حال توقف است.');
-                return;
-            }
-
-            const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            if (paintButton) {
-                const buttonText = paintButton.textContent.trim();
-
-                if (buttonText === 'Paint') {
-                    const canvas = document.querySelector('#canvasHolder');
-                    if (canvas) {
-                        const x = Math.floor(Math.random() * canvas.width);
-                        const y = Math.floor(Math.random() * canvas.height);
-                        simulatePointerEvents(canvas, x, y);
-                        simulatePointerEvents(paintButton, 0, 0);
-                        const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
-                        setTimeout(randomClick, nextClickDelay);
-                    }
-                }
-            } else {
-                console.log('ناحیه نقاشی پیدا نشد. سعی در باز کردن آن.');
-                openPaintWindow();
-                setTimeout(randomClick, 2000);
-            }
-        }
-
-        function openPaintWindow() {
-            waitForElement('#canvasHolder', (canvas) => {
-                console.log('ناحیه نقاشی باز شد.');
-            });
-        }
+        let paused = false;
 
         function startScript() {
             console.log('اسکریپت شروع شد.');
-            openPaintWindow();
-            setTimeout(randomClick, 2000);
+            // وارد کردن لینک تلگرام
+            window.location.href = 'https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526';
         }
 
         function togglePause() {
