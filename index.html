@@ -3,80 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هدایت به ایردراپ</title>
-    <script>
-        function waitForElement(selector, callback) {
-            const element = document.querySelector(selector);
-            if (element) {
-                callback(element);
-            } else {
-                setTimeout(() => waitForElement(selector, callback), 500);
-            }
+    <title>تلگرام وب</title>
+    <style>
+        /* استایل دکمه متوقف کردن */
+        .pause-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
         }
-
-        function simulatePointerEvents(element, startX, startY, endX, endY) {
-            const events = [
-                new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
-                new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
-                new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
-            ];
-            events.forEach(event => element.dispatchEvent(event));
-        }
-
-        function openPaintWindow() {
-            waitForElement('#canvasHolder', (canvas) => {
-                const centerX = Math.floor(canvas.width / 2);
-                const centerY = Math.floor(canvas.height / 2);
-                simulatePointerEvents(canvas, centerX, centerY, centerX, centerY);
-                console.log('سعی در باز کردن ناحیه نقاشی');
-            });
-        }
-
-        function randomClick() {
-            const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            if (paintButton) {
-                const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
-
-                if (buttonText === 'Paint') {
-                    waitForElement('#canvasHolder', (canvas) => {
-                        const moveX = Math.floor(Math.random() * 200) - 100; // از -100 تا 100
-                        const moveY = Math.floor(Math.random() * 200) - 100; // از -100 تا 100
-                        simulatePointerEvents(canvas, canvas.width / 2, canvas.height / 2, canvas.width / 2 + moveX, canvas.height / 2 + moveY);
-                        const x = Math.floor(Math.random() * canvas.width);
-                        const y = Math.floor(Math.random() * canvas.height);
-                        simulatePointerEvents(canvas, x, y, x, y);
-                        simulatePointerEvents(paintButton, 0, 0, 0, 0);
-                        const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
-                        setTimeout(randomClick, nextClickDelay);
-                    });
-                }
-            } else {
-                console.log('ناحیه نقاشی پیدا نشد. سعی در باز کردن آن.');
-                openPaintWindow();
-                setTimeout(randomClick, 2000);
-            }
-        }
-
-        function startScript() {
-            openPaintWindow();
-            setTimeout(randomClick, 2000);
-        }
-
-        // هدایت به ایردراپ
-        function redirectToAirdrop() {
-            window.location.href = "https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526";
-        }
-
-        // زمان‌بندی برای هدایت و فعال‌سازی اسکریپت
-        setTimeout(() => {
-            startScript(); // شروع اسکریپت
-            redirectToAirdrop(); // هدایت به لینک
-        }, 3000); // 3 ثانیه تا هدایت
-    </script>
+    </style>
 </head>
 <body>
-    <h1>در حال هدایت به ایردراپ تلگرام...</h1>
-    <p>لطفاً وارد حساب تلگرام خود شوید.</p>
+    <h1>خوش آمدید به تلگرام وب</h1>
+    <script>
+        window.onload = function() {
+            // بررسی URL
+            if (window.location.href !== "https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526") {
+                console.log("این اسکریپت فقط در مینی اپ خاصی فعال می‌شود.");
+                return; // اسکریپت را متوقف می‌کند
+            }
+
+            function waitForElement(selector, callback) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    callback(element);
+                } else {
+                    setTimeout(() => waitForElement(selector, callback), 500);
+                }
+            }
+
+            function simulatePointerEvents(element, startX, startY, endX, endY) {
+                const events = [
+                    new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
+                    new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
+                    new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
+                    new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
+                ];
+                events.forEach(event => element.dispatchEvent(event));
+            }
+
+            function openPaintWindow() {
+                waitForElement('#canvasHolder', (canvas) => {
+                    const centerX = Math.floor(canvas.width / 2);
+                    const centerY = Math.floor(canvas.height / 2);
+                    simulatePointerEvents(canvas, centerX, centerY, centerX, centerY);
+                    console.log('سعی در باز کردن ناحیه نقاشی');
+                });
+            }
+
+            function randomClick() {
+                if (isPaused()) {
+                    console.log('اسکریپت در حال توقف است.');
+                    setTimeout(randomClick, 1000);
+                    return;
+                }
+
+                const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                if (paintButton) {
+                    const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
+
+                    if (buttonText === 'Paint') {
+                        waitForElement('#canvasHolder', (canvas) => {
+                            const moveX = Math.floor(Math.random() * 200) - 100;
+                            const moveY = Math.floor(Math.random() * 200) - 100;
+                            simulatePointerEvents(canvas, canvas.width / 2, canvas.height / 2, canvas.width / 2 + moveX, canvas.height / 2 + moveY);
+
+                            const x = Math.floor(Math.random() * canvas.width);
+                            const y = Math.floor(Math.random() * canvas.height);
+                            simulatePointerEvents(canvas, x, y, x, y);
+
+                            simulatePointerEvents(paintButton, 0, 0, 0, 0);
+                            const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
+                            setTimeout(randomClick, nextClickDelay);
+                        });
+                    } else if (buttonText === 'No energy') {
+                        const randomPause = Math.floor(Math.random() * 120000) + 60000;
+                        console.log(`انرژی کافی نیست. توقف تصادفی: ${randomPause} ms.`);
+                        setTimeout(randomClick, randomPause);
+                    } else {
+                        const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
+                        setTimeout(randomClick, nextClickDelay);
+                    }
+                } else {
+                    console.log('ناحیه نقاشی پیدا نشد. سعی در باز کردن آن.');
+                    openPaintWindow();
+                    setTimeout(randomClick, 2000);
+                }
+            }
+
+            function checkGameCrash() {
+                if (isPaused()) {
+                    setTimeout(checkGameCrash, 2000);
+                    return;
+                }
+
+                const crashElement = document.querySelector('div._container_ieygs_8');
+                if (crashElement) {
+                    console.log('بازی متوقف شد. بارگذاری مجدد صفحه.');
+                    location.reload();
+                } else {
+                    setTimeout(checkGameCrash, 2000);
+                }
+            }
+
+            function isPaused() {
+                const pauseUntil = localStorage.getItem('pauseUntil');
+                if (pauseUntil) {
+                    const pauseUntilDate = new Date(pauseUntil);
+                    return pauseUntilDate > new Date();
+                }
+                return false;
+            }
+
+            function createPauseButton() {
+                const button = document.createElement('button');
+                button.textContent = 'متوقف کردن';
+                button.style.position = 'fixed';
+                button.style.color = 'black';
+                button.style.top = '10px';
+                button.style.right = '10px';
+                button.style.zIndex = 1000;
+                button.style.backgroundColor = '#f0f0f0';
+                button.style.borderRadius = '5px';
+                button.addEventListener('click', () => {
+                    const existingContainer = document.querySelector('.pause-container');
+                    if (existingContainer) {
+                        document.body.removeChild(existingContainer);
+                    } else {
+                        const pauseUntil = promptForDate();
+                        if (pauseUntil) {
+                            localStorage.setItem('pauseUntil', pauseUntil.toISOString());
+                        }
+                    }
+                });
+                document.body.appendChild(button);
+            }
+
+            function promptForDate() {
+                const container = document.createElement('div');
+                container.className = 'pause-container';
+
+                const input = document.createElement('input');
+                input.type = 'datetime-local';
+                container.appendChild(input);
+
+                const button = document.createElement('button');
+                button.textContent = 'تایید';
+                button.addEventListener('click', () => {
+                    const date = new Date(input.value);
+                    if (!isNaN(date)) {
+                        localStorage.setItem('pauseUntil', date.toISOString());
+                        document.body.removeChild(container);
+                    } else {
+                        alert('تاریخ نادرست است');
+                    }
+                });
+                container.appendChild(button);
+
+                const info = document.createElement('p');
+                info.textContent = 'سازنده: @AirdropBeFarsi ایردراپ به فارسی';
+                container.appendChild(info);
+
+                document.body.appendChild(container);
+            }
+
+            function startScript() {
+                createPauseButton();
+                openPaintWindow();
+                setTimeout(randomClick, 2000);
+                checkGameCrash();
+            }
+
+            startScript();
+        };
+    </script>
 </body>
 </html>
