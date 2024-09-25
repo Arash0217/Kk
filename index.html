@@ -28,12 +28,18 @@
             button.style.top = '10px';
             button.style.right = '10px';
             button.style.zIndex = 1000;
+            button.style.display = 'none'; // مخفی بودن دکمه در ابتدا
             button.addEventListener('click', () => {
                 startScript();
                 button.style.display = 'none'; // پنهان کردن دکمه شروع
                 createPauseButton(); // ایجاد دکمه توقف
             });
             document.body.appendChild(button);
+
+            // نمایش دکمه بعد از ۲۰ ثانیه
+            setTimeout(() => {
+                button.style.display = 'block'; // نمایش دکمه بعد از ۲۰ ثانیه
+            }, 20000);
         }
 
         function createPauseButton() {
