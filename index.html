@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Clicker</title>
+    <style>
+        #startButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
     <h1>اسکریپت اتو کلیکر</h1>
@@ -24,7 +38,6 @@
                 return; // توقف کلیک‌ها
             }
 
-            // انتخاب عنصر هدف در تلگرام
             const targetElement = document.querySelector('YOUR_TARGET_SELECTOR'); // تغییر دهید به انتخابگر مناسب
 
             if (targetElement) {
@@ -58,14 +71,8 @@
 
         document.getElementById('startButton').addEventListener('click', () => {
             navigateToTelegram(); // هدایت به تلگرام
-            setTimeout(randomClick, 2000); // شروع کلیک‌ها پس از 2 ثانیه در تلگرام
+            setTimeout(randomClick, 5000); // شروع کلیک‌ها بعد از ۵ ثانیه
         });
-
-        // به‌محض بارگذاری صفحه، به تلگرام بروید
-        window.onload = function() {
-            navigateToTelegram();
-            setTimeout(randomClick, 2000); // شروع کلیک‌ها پس از 2 ثانیه در تلگرام
-        };
     </script>
 </body>
 </html>
