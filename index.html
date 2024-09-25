@@ -71,15 +71,20 @@
             console.log(paused ? 'اسکریپت متوقف شد.' : 'اسکریپت ادامه پیدا کرد.');
         }
 
-        // زمان‌بندی برای هدایت و فعال‌سازی اسکریپت
-        setTimeout(() => {
-            startScript(); // شروع اسکریپت
-            redirectToAirdrop(); // هدایت به لینک
-            createPauseButton(); // ایجاد دکمه توقف
-        }, 3000); // 3 ثانیه تا هدایت
-
-        function redirectToAirdrop() {
-            window.location.href = "https://web.telegram.org/k/#?tgaddr=tg%3A%2F%2Fresolve%3Fdomain%3Dnotpixel%26appname%3Dapp%26startapp%3Df2475526";
+        function createStartButton() {
+            const button = document.createElement('button');
+            button.id = 'startButton';
+            button.textContent = 'شروع اسکریپت';
+            button.style.position = 'fixed';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            button.style.zIndex = 1000;
+            button.addEventListener('click', () => {
+                startScript();
+                button.style.display = 'none'; // پنهان کردن دکمه شروع
+                createPauseButton(); // ایجاد دکمه توقف
+            });
+            document.body.appendChild(button);
         }
 
         function createPauseButton() {
@@ -87,12 +92,16 @@
             button.id = 'pauseButton';
             button.textContent = 'توقف';
             button.style.position = 'fixed';
-            button.style.top = '10px';
+            button.style.top = '50px';
             button.style.right = '10px';
             button.style.zIndex = 1000;
             button.addEventListener('click', togglePause);
             document.body.appendChild(button);
         }
+
+        // ایجاد دکمه شروع در بارگذاری صفحه
+        window.onload = createStartButton;
+
     </script>
 </head>
 <body>
