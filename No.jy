@@ -1,130 +1,55 @@
-// ==UserScript==
-// @name         کانال تلگرام: @AirdropBeFarsi
-// @namespace    Violentmonkey Scripts
-// @match        *://*notpx.app/*
-// @version      1.0
-// @grant        none
-// @icon         https://notpx.app/favicon.ico
-// @downloadURL  https://github.com/Arash0217/kk/raw/main/no.js
-// @updateURL    https://github.com/Arash0217/kk/raw/main/no.js
-// @homepage     https://github.com/Arash0217/Not-Pixel
-// ==/UserScript==
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطرات استفاده از اتوکلیکر و اسکریپت</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #c0392b; }
+        p { line-height: 1.6; font-size: 18px; }
+        .warning { background-color: #ffeaa7; border-left: 6px solid #d35400; padding: 10px; margin: 20px 0; }
+        .hidden { display: none; }
+        button { background-color: #3498db; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+        button:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
 
-(function() {
-    'use strict';
+<h1>⚠️ خطرات استفاده از اتوکلیکر و اسکریپت ⚠️</h1>
+<div class="warning">
+    <strong>🚨 هشدار!</strong> استفاده از اتوکلیکرها و اسکریپت‌ها می‌تواند خطراتی به همراه داشته باشد. احتمال بن شدن حساب کاربری شما وجود دارد.
+</div>
+<p>اگر شما از این ابزارها به صورت نادرست یا بیش از حد استفاده کنید، احتمال بن شدن شما بیشتر می‌شود. ❌</p>
+<p>ما هیچ مسئولیتی در قبال بن شدن یا نشدن شما نداریم. هرگونه استفاده از این ابزارها به عهده خود شما است و ما به هیچ عنوان مسئولیتی در قبال عواقب آن نداریم. ⚠️</p>
+<p>به یاد داشته باشید که ریسک بن شدن بیشتر به نوع استفاده شما از اسکریپت‌ها بستگی دارد. 🔍</p>
 
-    // تابع برای نمایش فرم ورود کد تلگرام
-    function showInputForm() {
-        const formHtml = `
-            <div id="telegramForm" style="position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.5); z-index:1000;">
-                <h2>لطفاً کد عددی تلگرام خود را وارد کنید</h2>
-                <div style="color:red; font-weight:bold;">هشدار: استفاده از این اسکریپت ممکن است منجر به بن شدن حساب شما شود. مسئولیت استفاده از آن به عهده شماست.</div>
-                <input type="number" id="telegramId" placeholder="کد عددی تلگرام" />
-                <button id="submit">ارسال</button>
-                <button id="close">بستن</button>
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', formHtml);
+<form id="consentForm">
+    <label>
+        <input type="checkbox" id="consent" required>
+        شرایط را خوانده‌ام و ریسک را قبول می‌کنم. ✔️
+    </label>
+    <br><br>
+    <button type="submit">✅ تأیید</button>
+</form>
 
-        // رویداد دکمه ارسال
-        document.getElementById('submit').onclick = function() {
-            const telegramId = document.getElementById('telegramId').value;
-            const validId = '123456789'; // کد عددی معتبر را اینجا قرار بده
-            if (telegramId === validId) {
-                console.log('کد عددی تلگرام معتبر است:', telegramId);
-                startScript(telegramId);
-                document.getElementById('telegramForm').remove();
-            } else {
-                alert('کد عددی تلگرام نادرست است.');
-            }
-        };
+<div id="message" class="hidden">
+    <h2>🔗 لینک دانلود اسکریپت:</h2>
+    <p><a href="https://github.com/Arash0217/Heh/blob/main/not-autoclicker.user.js">اینجا کلیک کنید</a></p>
+</div>
 
-        // رویداد دکمه بستن
-        document.getElementById('close').onclick = function() {
-            document.getElementById('telegramForm').remove();
-        };
-    }
+<div id="tutorial" class="hidden">
+    <h2>📚 آموزش استفاده از اسکریپت:</h2>
+    <p><a href="https://example.com/tutorial">اینجا کلیک کنید</a></p>
+</div>
 
-    // تابع اصلی اسکریپت
-    function startScript(telegramId) {
-        console.log('اسکریپت برای کد تلگرام فعال شد:', telegramId);
-        // ادامه کد اسکریپت اصلی
-        openPaintWindow();
-        setTimeout(randomClick, 2000);
-        checkGameCrash();
-    }
+<script>
+    document.getElementById('consentForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        document.getElementById('message').classList.remove('hidden');
+        document.getElementById('tutorial').classList.remove('hidden');
+    });
+</script>
 
-    function waitForElement(selector, callback) {
-        const element = document.querySelector(selector);
-        if (element) {
-            callback(element);
-        } else {
-            setTimeout(() => waitForElement(selector, callback), 500);
-        }
-    }
-
-    function simulatePointerEvents(element, startX, startY, endX, endY) {
-        const events = [
-            new PointerEvent('pointerdown', { clientX: startX, clientY: startY, bubbles: true }),
-            new PointerEvent('pointermove', { clientX: startX, clientY: startY, bubbles: true }),
-            new PointerEvent('pointermove', { clientX: endX, clientY: endY, bubbles: true }),
-            new PointerEvent('pointerup', { clientX: endX, clientY: endY, bubbles: true })
-        ];
-        events.forEach(event => element.dispatchEvent(event));
-    }
-
-    function openPaintWindow() {
-        waitForElement('#canvasHolder', (canvas) => {
-            const centerX = Math.floor(canvas.width / 2);
-            const centerY = Math.floor(canvas.height / 2);
-            simulatePointerEvents(canvas, centerX, centerY, centerX, centerY);
-            console.log('سعی در باز کردن ناحیه نقاشی');
-        });
-    }
-
-    function randomClick() {
-        const paintButton = document.evaluate('//*[@id="root"]/div/div[5]/div/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        if (paintButton) {
-            const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
-
-            if (buttonText === 'Paint') {
-                waitForElement('#canvasHolder', (canvas) => {
-                    const moveX = Math.floor(Math.random() * 200) - 100;
-                    const moveY = Math.floor(Math.random() * 200) - 100;
-                    simulatePointerEvents(canvas, canvas.width / 2, canvas.height / 2, canvas.width / 2 + moveX, canvas.height / 2 + moveY);
-
-                    const x = Math.floor(Math.random() * canvas.width);
-                    const y = Math.floor(Math.random() * canvas.height);
-                    simulatePointerEvents(canvas, x, y, x, y);
-
-                    simulatePointerEvents(paintButton, 0, 0, 0, 0);
-                    const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
-                    setTimeout(randomClick, nextClickDelay);
-                });
-            } else if (buttonText === 'No energy') {
-                const randomPause = Math.floor(Math.random() * 120000) + 60000;
-                console.log(`انرژی کافی نیست. توقف تصادفی: ${randomPause} ms.`);
-                setTimeout(randomClick, randomPause);
-            } else {
-                const nextClickDelay = Math.floor(Math.random() * 1000) + 1000;
-                setTimeout(randomClick, nextClickDelay);
-            }
-        } else {
-            console.log('ناحیه نقاشی پیدا نشد. سعی در باز کردن آن.');
-            openPaintWindow();
-            setTimeout(randomClick, 2000);
-        }
-    }
-
-    function checkGameCrash() {
-        const crashElement = document.querySelector('div._container_ieygs_8');
-        if (crashElement) {
-            console.log('بازی متوقف شد. بارگذاری مجدد صفحه.');
-            location.reload();
-        } else {
-            setTimeout(checkGameCrash, 2000);
-        }
-    }
-
-    showInputForm(); // نمایش فرم ورود کد تلگرام
-})();
+</body>
+</html>
